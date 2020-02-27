@@ -5,9 +5,9 @@ import { gql } from 'apollo-boost';
 
 const PostCard = (p: any, idx: number) => (
     <WingBlank key={idx} size="md">
-        <Card style={{ padding: 0 }}>
+        <Card style={{ padding: 0, height: '4rem' }}>
             <Card.Body style={{ display: 'flex', padding: 0, overflow: 'hidden' }}>
-                <img alt="" src="./notfound.png" width='100rem' height='100rem' style={{ marginLeft: '-1.5rem', clipPath: "polygon(25% 0%, 100% 0%, 75% 100%, 0% 100%)" }} />
+                <img alt="" src="./notfound.png" style={{ height: 'auto',marginLeft: '-2.5rem', clipPath: "polygon(25% 0%, 100% 0%, 75% 100%, 0% 100%)" }} />
                 <Flex direction="column" justify="between" style={{ width: '100%' }}>
                     <div>
                         <div>{p.title}</div>

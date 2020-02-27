@@ -54,3 +54,11 @@
   display: flex;
   flex-direction: column;
 }
+
+.am-card{
+  min-height: unset;
+}
+
+.login-input .am-list-line{
+  border-bottom: unset!important;
+}
