@@ -6,6 +6,7 @@ import { gql } from 'apollo-boost';
 // @ts-ignore
 import * as HtmlToReact from 'html-to-react';
 import { useMutation } from '@apollo/react-hooks';
+import { Wrapper } from '../components/Wrapper';
 
 
 const CREATE_POST_QUERY = gql`mutation CREATE_POST_QUERY($title: String!, $body: String!, $communityId: ID!){
@@ -40,7 +41,7 @@ const CreatePost: React.FC = () => {
             {props.tabs.map((t, idx) => {
               const activeStyleTab = idx === props.activeTab ? { borderBottom: '1px solid #108ee9' } : {}
               const disabledTab = t.isPreviewDisabled ? { color: 'grey', pointerEvents: 'none' } : {}
-              return <Flex.Item onClick={() => props.goToTab(idx)} style={{ ...disabledTab, ...activeStyleTab, marginLeft: 0, height: '2.5rem', display: 'flex', justifyContent: 'center', alignItems: 'center', backgroundColor: 'white' }}>
+              return <Flex.Item key={idx} onClick={() => props.goToTab(idx)} style={{ ...disabledTab, ...activeStyleTab, marginLeft: 0, height: '2.5rem', display: 'flex', justifyContent: 'center', alignItems: 'center', backgroundColor: 'white' }}>
                 <span>{t.title}</span>
               </Flex.Item>
             })}
@@ -94,4 +95,4 @@ const CreatePost: React.FC = () => {
   );
 }
 
-export default CreatePost;
+export default Wrapper(CreatePost);

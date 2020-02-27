@@ -9,7 +9,12 @@ import { ApolloProvider } from '@apollo/react-hooks';
 import ApolloClient from 'apollo-boost';
 
 const client = new ApolloClient({
-    uri: 'http://localhost:4000/graphql',
+    uri: 'http://localhost:6060/graphql',
+    request: (operation) => {
+        const token = localStorage.getItem('reddit-clone-token')
+        const headers = token ? { authorization: `${token}` } : {}
+        operation.setContext({ ...headers })
+    }
 });
 
 ReactDOM.render(<ApolloProvider client={client}><App /></ApolloProvider>, document.getElementById('root'));

@@ -62,3 +62,9 @@
 .login-input .am-list-line{
   border-bottom: unset!important;
 }
+
+.am-list-body{
+  background-color: unset;
+  border-top: unset;
+  border-bottom: unset;
+}

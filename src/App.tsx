@@ -1,7 +1,6 @@
 import React from 'react';
 import 'antd-mobile/dist/antd-mobile.css';
 import './App.css';
-import Top from './components/Drawer';
 import Feed from './screens/Feed';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import CreatePost from './screens/CreatePost';
@@ -12,7 +11,6 @@ function App() {
 
   return (
     <Router>
-      <Top>
         <Switch>
           <Route path="/" exact noTitle>
             <Login />
@@ -27,7 +25,6 @@ function App() {
             <Register />
           </Route>
         </Switch>
-      </Top>
     </Router>
   );
 }
