@@ -1,26 +1,25 @@
 import React, { useState } from 'react';
-import { InputItem, WhiteSpace, WingBlank, Button, Toast } from 'antd-mobile';
+import { InputItem, WhiteSpace, WingBlank, Button, Toast, Tag } from 'antd-mobile';
 import { gql } from 'apollo-boost';
 import { useMutation } from '@apollo/react-hooks';
 import { Redirect } from 'react-router-dom';
 
-const LOGIN_QUERY = gql`mutation($login: String!, $password: String!){
-    signIn(login: $login, password: $password ){
+const REGISTER_QUERY = gql`mutation($username: String!, $password: String!, $email: String!){
+    userCreateOne(username: $username, password: $password, email: $email){
       token
     }
   }`;
 
-const Login = () => {
+const Register = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const [logged, setLogged] = useState(false);
-    const [goToRegister, setGoToRegister] = useState(false);
+    const [email, setEmail] = useState('');
+    const [registered, setRegistered] = useState(false);
+    const [userCreateOne, { loading }] = useMutation(REGISTER_QUERY);
 
-    const [signIn, { loading }] = useMutation(LOGIN_QUERY);
-
-    if (logged) return <Redirect to="/feed" />
-
-    if (goToRegister) return <Redirect to="/register" />
+    if (registered) {
+        return <Redirect to="/feed" />
+    }
 
     return (
         <>
@@ -35,7 +34,11 @@ const Login = () => {
             </div>
             <WingBlank>
                 <h1 style={{ textAlign: 'center' ,color: 'white' }}>Reddit Clone</h1>
-                <h3 style={{ textAlign: 'center' ,color: 'white', marginBottom: '1rem' }}>Reddit clone by @TheLox95</h3>
+                <h3 style={{ textAlign: 'center' ,color: 'white', marginBottom: '1rem' }}>
+                    Reddit clone by <a href="https://thelox95.github.io/">
+                        <Tag>@TheLox95</Tag>
+                    </a>
+                </h3>
                 <InputItem
                     className="login-input"
                     placeholder="Username"
@@ -51,28 +54,29 @@ const Login = () => {
                     clear
                     onChange={(v) => setPassword(v)}
                 ></InputItem>
-                <WhiteSpace size='xl' />
+                <WhiteSpace />
+                <InputItem
+                    placeholder="Email"
+                    className="login-input"
+                    type="text"
+                    clear
+                    onChange={(v) => setEmail(v)}
+                ></InputItem>
                 <WhiteSpace size='xl' />
                 <Button style={{ backgroundColor: '#6157da' }} loading={loading} type="primary" onClick={() => {
-                    signIn({ variables: { login: username, password: password } })
-                        .then(({ data: { signIn } }) => {
-                            localStorage.setItem('reddit-clone-token', signIn.token);
-                            setLogged(true);
+                    userCreateOne({ variables: { username: username, password: password, email: email } })
+                        .then(({ data: { userCreateOne } }) => {
+                            localStorage.setItem('reddit-clone-token', userCreateOne.token);
+                            setRegistered(true);
                         })
                         .catch((err) => {
                             Toast.fail(err.toString(), 4)
                         })
-                }}>Login</Button>
-                <WhiteSpace size='xl' />
-                <WhiteSpace size='xl' />
-                <WhiteSpace size='xl' />
-                <Button onClick={() => {
-                    setGoToRegister(true);
-                }} size="small" type="primary">Register</Button>
+                }}>Register</Button>
             </WingBlank>
         </>
     );
 
 }
 
-export default Login;
+export default Register;
