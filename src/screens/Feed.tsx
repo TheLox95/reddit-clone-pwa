@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, WhiteSpace, WingBlank, Flex, PullToRefresh } from 'antd-mobile';
 import { useQuery } from '@apollo/react-hooks';
 import { gql } from 'apollo-boost';
@@ -24,29 +24,40 @@ const PostCard = (p: any, idx: number) => (
     </WingBlank>
 )
 
+const POST_QUERY = gql`{
+    posts{
+      title
+      body
+      author{
+        username
+        }
+    }
+  }`;
+
 const Feed: React.FC = () => {
     const [refreshing, setRefreshing] = useState(false);
-    const { loading, error, data } = useQuery<{ posts: [] }>(gql`{
-        posts{
-          title
-          body
-          author{
-            username
-            }
-        }
-      }`);
+    const [posts, setPosts] = useState<any[]>([]);
+    const { loading, error, data } = useQuery<{ posts: [] }>(POST_QUERY);
+
+    useEffect(() => {
+        setPosts(prev => {
+            return data ? prev.concat(data.posts) : prev;
+        });
+    }, [loading]);
+
     if (loading) return <p>Loading...</p>;
     if (error) return <p>Error :(</p>;
+
     return (
         <PullToRefresh
-            getScrollContainer={() => <div />}
+            getScrollContainer={() => null}
             distanceToRefresh={25}
             damping={60}
             style={{
                 height: document.documentElement.clientHeight,
                 overflow: 'auto',
             }}
-            indicator={{ deactivate: 'Loading' }}
+            indicator={{ deactivate: null }}
             direction={'down'}
             refreshing={refreshing}
             onRefresh={() => {
@@ -56,7 +67,7 @@ const Feed: React.FC = () => {
                 }, 1000);
             }}
         >
-            {data?.posts.map(PostCard)}
+            {posts.map(PostCard)}
         </PullToRefresh>
     );
 }

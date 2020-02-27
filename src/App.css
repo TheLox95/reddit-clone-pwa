@@ -3,6 +3,7 @@
   overflow: auto;
   z-index: 0;
   -webkit-overflow-scrolling: touch;
+  min-height: unset!important;
 }
 .my-drawer .am-drawer-sidebar {
   background-color: #fff;
@@ -13,8 +14,43 @@
 #root{
   height: 100vh;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 .navBar-svg{
   position: absolute;
+}
+
+.reactMde{
+  display: flex;
+  flex-direction: column-reverse;
+  flex: 1;
+}
+
+.reactMde > :nth-child(2){
+  display: flex;
+  flex: 1;
+}
+
+.reactMde .mde-textarea-wrapper{
+  display: flex;
+  flex: 1;
+}
+
+.reactMde .mde-header{
+  justify-content: space-around;
+}
+
+.reactMde textarea{
+  height: unset!important;
+}
+
+.grip{
+  display: none;
+}
+
+.am-tabs-pane-wrap{
+  display: flex;
+  flex-direction: column;
 }

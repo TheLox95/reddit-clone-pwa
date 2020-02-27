@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
+import "react-mde/lib/styles/css/react-mde-all.css";
 import * as serviceWorker from './serviceWorker';
 
 import { ApolloProvider } from '@apollo/react-hooks';
