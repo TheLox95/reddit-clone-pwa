@@ -6,6 +6,7 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import CreatePost from './screens/CreatePost';
 import Login from './screens/Login';
 import Register from './screens/Register';
+import ViewPost from './screens/ViewPost';
 
 function App() {
 
@@ -14,6 +15,9 @@ function App() {
         <Switch>
           <Route path="/" exact noTitle>
             <Login />
+          </Route>
+          <Route path="/post/:id" exact noTitle>
+            <ViewPost />
           </Route>
           <Route path="/feed" exact>
             <Feed />

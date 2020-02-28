@@ -1,30 +1,34 @@
 import React, { useState, useEffect } from 'react';
 import { Card, WhiteSpace, WingBlank, Flex, PullToRefresh, ListView } from 'antd-mobile';
 import { useQuery } from '@apollo/react-hooks';
+import { useHistory } from "react-router-dom";
 import { gql } from 'apollo-boost';
 import { Wrapper } from '../components/Wrapper';
 
-const PostCard = (p: any, idx: React.ReactText) => (
-    <WingBlank key={idx} size="md">
-        {idx === '0' ? <WhiteSpace size="lg" style={{ minHeight: '1.5rem' }} /> : null}
-        <Card style={{ padding: 0, height: '4rem' }}>
-            <Card.Body style={{ display: 'flex', padding: 0, overflow: 'hidden' }}>
-                <img alt="" src="./notfound.png" style={{ height: 'auto', marginLeft: '-2.5rem', clipPath: "polygon(25% 0%, 100% 0%, 75% 100%, 0% 100%)" }} />
-                <Flex direction="column" justify="between" style={{ width: '100%' }}>
-                    <div>
-                        <div>{p.title}</div>
-                        <div style={{ fontSize: '0.6rem' }}>{p.body.slice(0, 40)}</div>
-                    </div>
-                    <Flex justify="between" style={{ width: '90%' }}>
-                        <span style={{ color: 'grey', fontSize: '0.7rem' }}>{Date.now()}</span>
-                        <span style={{ color: 'grey', fontSize: '0.7rem' }}>By {p.author.username}</span>
+const PostCard = (p: any, idx: React.ReactText, fn: () => void) => {
+
+    return (
+        <WingBlank key={idx} size="md">
+            {idx === '0' ? <WhiteSpace size="lg" style={{ minHeight: '1.5rem' }} /> : null}
+            <Card onClick={() => fn() } style={{ padding: 0, height: '4rem' }}>
+                <Card.Body style={{ display: 'flex', padding: 0, overflow: 'hidden' }}>
+                    <img alt="" src="./notfound.png" style={{ height: 'auto', marginLeft: '-2.5rem', clipPath: "polygon(25% 0%, 100% 0%, 75% 100%, 0% 100%)" }} />
+                    <Flex direction="column" justify="between" style={{ width: '100%' }}>
+                        <div>
+                            <div>{p.title}</div>
+                            <div style={{ fontSize: '0.6rem' }}>{p.body.slice(0, 40)}</div>
+                        </div>
+                        <Flex justify="between" style={{ width: '90%' }}>
+                            <span style={{ color: 'grey', fontSize: '0.7rem' }}>{Date.now()}</span>
+                            <span style={{ color: 'grey', fontSize: '0.7rem' }}>By {p.author.username}</span>
+                        </Flex>
                     </Flex>
-                </Flex>
-            </Card.Body>
-        </Card>
-        <WhiteSpace size="lg" />
-    </WingBlank>
-)
+                </Card.Body>
+            </Card>
+            <WhiteSpace size="lg" />
+        </WingBlank>
+    )
+}
 
 const Pull: React.FC = ({ children }) => {
     const [refreshing, setRefreshing] = useState(false);
@@ -64,7 +68,8 @@ let source = new ListView.DataSource({
 });
 
 const Feed: React.FC = () => {
-    const [refreshing,] = useState(false);
+    const history = useHistory()
+
     const [fetchIdx, setFetchIdx] = useState(0);
     const [dataSource, setDataSource] = useState(source);
     const [, setPosts] = useState<any[]>([]);
@@ -102,7 +107,7 @@ const Feed: React.FC = () => {
             contentContainerStyle={{ position: 'unset' }}
             style={{ flex: 1 }}
             dataSource={dataSource}
-            renderRow={(data: any, _, id) => PostCard(data, id)}
+            renderRow={(data: any, _, id) => PostCard(data, id, () => history.push(`/post/${data.id}`))}
             scrollRenderAheadDistance={500}
             onEndReached={() => setFetchIdx(prev => prev + 1)}
             onEndReachedThreshold={10}

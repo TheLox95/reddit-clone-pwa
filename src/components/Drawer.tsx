@@ -10,6 +10,7 @@ const DrawerComponent: React.FC<{ background: 'sm' | 'bg' }> = ({ children, back
     { name: '/feed' },
     { name: '/createPost' },
     { name: '/register' },
+    { name: '/post' },
   ];
   const location = useLocation()
   return (
