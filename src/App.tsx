@@ -16,9 +16,17 @@ function App() {
           <Route path="/" exact noTitle>
             <Login />
           </Route>
-          <Route path="/post/:id" exact noTitle>
-            <ViewPost />
-          </Route>
+          <Route
+            path="/post/:id"
+            render={({ match: { path, params: { id } } }) => {
+              return (
+                <>
+                  <Route path={`${path}/`} component={ViewPost} exact />
+                  <Route path={`${path}/comment/:commentId`} component={ViewPost} />
+                </>
+              );
+            }}
+          />
           <Route path="/feed" exact>
             <Feed />
           </Route>

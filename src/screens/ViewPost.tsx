@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
-import { Card, WingBlank, Flex, Tabs, Button, Toast, WhiteSpace } from 'antd-mobile';
-import ReactMde from "react-mde";
+import React from 'react';
+import { Card, WingBlank, WhiteSpace, Toast } from 'antd-mobile';
 import { gql } from 'apollo-boost';
 // @ts-ignore
 import * as HtmlToReact from 'html-to-react';
-import { useMutation, useQuery } from '@apollo/react-hooks';
+import { useQuery } from '@apollo/react-hooks';
 import { Wrapper } from '../components/Wrapper';
 import { useParams, Redirect } from 'react-router-dom';
+import CommentsList from '../components/CommentList';
+import Showdown from 'showdown';
 
 
 const POST_QUERY = gql`query QUERY($id: ID!){
@@ -15,7 +16,9 @@ const POST_QUERY = gql`query QUERY($id: ID!){
     title
     body
     comments{
+        id
         body
+        rootPost
         author{
             username
         }
@@ -26,41 +29,50 @@ const POST_QUERY = gql`query QUERY($id: ID!){
   }
 }`;
 
+const converter = new Showdown.Converter({
+    tables: true,
+    simplifiedAutoLink: true,
+    strikethrough: true,
+    tasklists: true
+});
+
+const parser = new HtmlToReact.Parser();
+
 const CreatePost: React.FC = () => {
-    const { id } = useParams();
+    const { id, commentId } = useParams();
 
     const { loading, error, data } = useQuery<{ post: any }>(POST_QUERY, { variables: { id: id || 0 } });
 
     if (!id) return <Redirect to="/feed" />
 
+    if (error) {
+        Toast.fail(error.toString(), 3)
+        return <Redirect to="/feed" />
+    }
     if (loading) return <p>Loading...!</p>
-    console.log(data?.post)
+
+    const ListManager = () => {
+        if (!commentId) {
+            return <CommentsList comments={data?.post.comments} />
+        }
+
+        const rootComment = data?.post.comments.find((c: { id: string }) => c.id === commentId)
+
+        return <CommentsList comments={data?.post.comments} rootComment={rootComment} />
+
+    }
 
     return (
-        <WingBlank size="md">
+        <WingBlank size="md" style={{ overflowX: 'hidden' }}>
             <Card >
                 <Card.Body style={{ display: 'flex', padding: 0, overflow: 'hidden' }}>
-                    <div>{data?.post.body}</div>
+                    <div>{parser.parse(converter.makeHtml(data?.post.body))}</div>
                 </Card.Body>
             </Card>
             <WhiteSpace size='xl' />
 
-            {data?.post.comments.map((c: any) => {
-                return (
-                    <>
-                    <Card style={{ border: 'unset', backgroundColor: '#f4f5f7'}} >
-                        <Card.Body style={{ textAlign: 'left', display: 'flex', flexDirection: 'column', padding: "0px 0px 0px 0.6rem", overflow: 'hidden', border: 'unset' }}>
-                            <WhiteSpace size="sm" />
+            <ListManager />
 
-                            <div style={{ fontWeight: 'bold'}}>{c.author.username}</div>
-                            <div>{c.body}</div>
-                            <span style={{ color: c.comments.length > 0 ? 'black' : 'grey' ,fontSize: '0.8rem', textAlign: 'left'}}>{c.comments.length > 0? "has comments": 'No comments'}</span>
-                        </Card.Body>
-                    </Card>
-                    <WhiteSpace size='sm' />
-                    </>
-                );
-            })}
         </WingBlank>
     );
 }
