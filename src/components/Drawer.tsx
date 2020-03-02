@@ -11,6 +11,7 @@ const DrawerComponent: React.FC<{ background: 'sm' | 'bg' }> = ({ children, back
     { name: '/createPost' },
     { name: '/register' },
     { name: '/post' },
+    { name: '/communities' },
   ];
   const location = useLocation()
   return (

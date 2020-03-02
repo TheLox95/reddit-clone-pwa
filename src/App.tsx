@@ -8,6 +8,7 @@ import Login from './screens/Login';
 import Register from './screens/Register';
 import ViewPost from './screens/ViewPost';
 import Profile from './screens/Profile';
+import Communities from './screens/Communities';
 
 function App() {
 
@@ -30,6 +31,9 @@ function App() {
           />
           <Route path="/feed" exact>
             <Feed />
+          </Route>
+          <Route path="/communities" exact>
+            <Communities />
           </Route>
           <Route path="/profile/:userId" exact>
             <Profile />
