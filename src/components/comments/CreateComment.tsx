@@ -27,7 +27,7 @@ const converter = new Showdown.Converter({
     tasklists: true
 });
 
-const CreateComment: React.FC<{ onCreate: (r: any) => void, rootPost: string, commentId?: string, postId?: string }> = ({ onCreate, rootPost, commentId, postId }) => {
+const CreateComment: React.FC<{ onCreate?: (r: any) => void, rootPost: string, commentId?: string, postId?: string }> = ({ onCreate, rootPost, commentId, postId }) => {
 
     const [preview, setPreview] = useState({ raw: '', parsed: '' });
     const [wantToCreate, setWantToCreate] = useState(false);
@@ -81,7 +81,7 @@ const CreateComment: React.FC<{ onCreate: (r: any) => void, rootPost: string, co
                             }
                             const parser = new HtmlToReact.Parser();
                             const p = parser.parse(converter.makeHtml(t))
-                            setPreview({ parsed: p, raw: t })
+                            setPreview({ parsed: p ?? '', raw: t })
                         }}
                         disablePreview={true}
                         selectedTab={undefined}
@@ -111,7 +111,7 @@ const CreateComment: React.FC<{ onCreate: (r: any) => void, rootPost: string, co
                             if (postId) {
                                 commentPost({ variables: { postId, body: preview.raw, rootPostId: rootPost } })
                                     .then(r => {
-                                        onCreate(r.data)
+                                        onCreate && onCreate(r.data)
                                         setWantToCreate(false)
                                     })
                                     .catch((err) => {
@@ -122,7 +122,7 @@ const CreateComment: React.FC<{ onCreate: (r: any) => void, rootPost: string, co
                             if (commentId) {
                                 commentAnotherComment({ variables: { commentId, body: preview.raw, rootPostId: rootPost } })
                                     .then(r => {
-                                        onCreate(r.data)
+                                        onCreate && onCreate(r.data)
                                         setWantToCreate(false)
                                     })
                                     .catch((err) => {

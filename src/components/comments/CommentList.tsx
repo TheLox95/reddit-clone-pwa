@@ -2,8 +2,8 @@ import React, {  } from 'react';
 import { useAnimation, motion } from 'framer-motion';
 import { Card, WhiteSpace, Icon } from 'antd-mobile';
 import { useHistory } from 'react-router-dom';
-import CreateComment from './comments/CreateComment';
-import { CommentQuery } from './comments/CommentListManager';
+import CreateComment from './CreateComment';
+import { CommentQuery } from './CommentListManager';
 
 const Comment: React.FC<{ isRoot?: true, comment: CommentQuery, onCommentClick?: (c: any) => void }> = ({ isRoot, comment, onCommentClick }) => {
     const meta: { backgroundColor: string, layout: 'column' | 'row-reverse' } = {

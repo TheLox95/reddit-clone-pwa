@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import CommentsList from '../CommentList';
+import CommentsList from './CommentList';
 import { useLazyQuery } from '@apollo/react-hooks';
 import { gql } from 'apollo-boost';
 import { PartialComment } from '../../screens/ViewPost';

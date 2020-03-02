@@ -1,13 +1,14 @@
-import React, {  } from 'react';
+import React, { useEffect } from 'react';
 import { Card, WingBlank, WhiteSpace, Toast } from 'antd-mobile';
 import { gql } from 'apollo-boost';
 // @ts-ignore
 import * as HtmlToReact from 'html-to-react';
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery, useLazyQuery } from '@apollo/react-hooks';
 import { Wrapper } from '../components/Wrapper';
 import { useParams, Redirect } from 'react-router-dom';
 import Showdown from 'showdown';
 import ListManager from '../components/comments/CommentListManager';
+import CreateComment from '../components/comments/CreateComment';
 
 
 const POST_QUERY = gql`query QUERY($id: ID!){
@@ -60,7 +61,11 @@ export type Post = {
 const ViewPost: React.FC = () => {
     const { id } = useParams();
 
-    const { loading, error, data } = useQuery<{ post: Post }>(POST_QUERY, { variables: { id: id || 0 } });
+    const [fetchQueries, { loading, error, data, refetch }] = useLazyQuery<{ post: Post }>(POST_QUERY, { variables: { id: id || 0 } });
+
+    useEffect(() => {
+        fetchQueries();
+    }, []);
 
     if (!id) return <Redirect to="/feed" />
 
@@ -80,6 +85,8 @@ const ViewPost: React.FC = () => {
                 </Card.Body>
             </Card>
             <WhiteSpace size='xl' />
+
+            {localStorage.getItem('reddit-clone-token') && data && <CreateComment onCreate={() => refetch()} rootPost={data?.post.id} postId={data?.post.id} />}
 
             {data && data.post && <ListManager comments={data.post.comments} rootPost={data.post} />}
 
