@@ -13,8 +13,6 @@ const LOGIN_QUERY = gql`mutation($login: String!, $password: String!){
   }`;
 
 const Login = () => {
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
     const [logged, setLogged] = useState(false);
     const [goToRegister, setGoToRegister] = useState(false);
     const { handleSubmit, control, errors } = useForm();
@@ -42,7 +40,6 @@ const Login = () => {
                     placeholder="Username"
                     type="text"
                     clear
-                    onChange={(v) => setUsername(v)}
                 />
                 } name="username" rules={{ required: true }} control={control} />
                 <WhiteSpace size="sm" />
@@ -58,7 +55,6 @@ const Login = () => {
                     className="login-input"
                     type="password"
                     clear
-                    onChange={(v) => setPassword(v)}
                 />
                 } name="password" rules={{ required: true }} control={control} />
                 <WhiteSpace size='sm' />
@@ -67,7 +63,7 @@ const Login = () => {
                 )}
                 <WhiteSpace size='xl' />
                 <Button style={{ backgroundColor: '#95bf74', borderColor: "#95bf74" }} loading={loading} type="primary" onClick={handleSubmit((d) => {
-                    signIn({ variables: { login: username, password: password } })
+                    signIn({ variables: { login: d.username, password: d.password } })
                         .then(({ data: { signIn } }) => {
                             localStorage.setItem('reddit-clone-token', signIn.token);
                             setLogged(true);

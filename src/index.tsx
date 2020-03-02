@@ -9,11 +9,18 @@ import { ApolloProvider } from '@apollo/react-hooks';
 import ApolloClient from 'apollo-boost';
 
 const client = new ApolloClient({
+    onError: (err) => {
+        if (Array.isArray(err.graphQLErrors) && err.graphQLErrors[0].extensions.code === 'UNAUTHENTICATED') {
+            localStorage.removeItem('reddit-clone-token');
+            // eslint-disable-next-line no-restricted-globals
+            location.reload()
+        }
+    },
     uri: 'http://localhost:6060/graphql',
     request: (operation) => {
         const token = localStorage.getItem('reddit-clone-token')
         const headers = token ? { authorization: `${token}` } : {}
-        operation.setContext({ ...headers })
+        operation.setContext({ headers })
     }
 });
 

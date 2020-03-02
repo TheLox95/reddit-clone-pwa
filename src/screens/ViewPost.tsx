@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {  } from 'react';
 import { Card, WingBlank, WhiteSpace, Toast } from 'antd-mobile';
 import { gql } from 'apollo-boost';
 // @ts-ignore
@@ -6,8 +6,8 @@ import * as HtmlToReact from 'html-to-react';
 import { useQuery } from '@apollo/react-hooks';
 import { Wrapper } from '../components/Wrapper';
 import { useParams, Redirect } from 'react-router-dom';
-import CommentsList from '../components/CommentList';
 import Showdown from 'showdown';
+import ListManager from '../components/comments/CommentListManager';
 
 
 const POST_QUERY = gql`query QUERY($id: ID!){
@@ -38,10 +38,29 @@ const converter = new Showdown.Converter({
 
 const parser = new HtmlToReact.Parser();
 
-const CreatePost: React.FC = () => {
-    const { id, commentId } = useParams();
+export type PartialComment = {
+    id: string,
+    body: string,
+    rootPost: string,
+    author: {
+        username: string,
+    }
+    comments: [{
+        id: string,
+    }]
+}
 
-    const { loading, error, data } = useQuery<{ post: any }>(POST_QUERY, { variables: { id: id || 0 } });
+export type Post = {
+    id: string,
+    title: string,
+    body: string,
+    comments: PartialComment[]
+}
+
+const ViewPost: React.FC = () => {
+    const { id } = useParams();
+
+    const { loading, error, data } = useQuery<{ post: Post }>(POST_QUERY, { variables: { id: id || 0 } });
 
     if (!id) return <Redirect to="/feed" />
 
@@ -51,30 +70,21 @@ const CreatePost: React.FC = () => {
     }
     if (loading) return <p>Loading...!</p>
 
-    const ListManager = () => {
-        if (!commentId) {
-            return <CommentsList comments={data?.post.comments} />
-        }
-
-        const rootComment = data?.post.comments.find((c: { id: string }) => c.id === commentId)
-
-        return <CommentsList comments={data?.post.comments} rootComment={rootComment} />
-
-    }
-
     return (
         <WingBlank size="md" style={{ overflowX: 'hidden' }}>
             <Card >
                 <Card.Body style={{ display: 'flex', padding: 0, overflow: 'hidden' }}>
-                    <div>{parser.parse(converter.makeHtml(data?.post.body))}</div>
+                    <div>
+                        {data && data.post && parser.parse(converter.makeHtml(data.post.body))}
+                    </div>
                 </Card.Body>
             </Card>
             <WhiteSpace size='xl' />
 
-            <ListManager />
+            {data && data.post && <ListManager comments={data.post.comments} rootPost={data.post} />}
 
         </WingBlank>
     );
 }
 
-export default Wrapper(CreatePost);
+export default Wrapper(ViewPost);
