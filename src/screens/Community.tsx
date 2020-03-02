@@ -1,41 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { PullToRefresh, ListView } from 'antd-mobile';
 import { useQuery } from '@apollo/react-hooks';
-import { useHistory } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import { gql } from 'apollo-boost';
 import { Wrapper } from '../components/Wrapper';
 import PostCard from '../components/comments/PostCard';
 
-const Pull: React.FC = ({ children }) => {
-    const [refreshing, setRefreshing] = useState(false);
-
-    return (
-        <PullToRefresh
-            getScrollContainer={() => null}
-            distanceToRefresh={25}
-            damping={60}
-            indicator={{ deactivate: null }}
-            direction={'down'}
-            refreshing={refreshing}
-            onRefresh={() => {
-                setRefreshing(true);
-                setTimeout(() => {
-                    setRefreshing(false);
-                }, 1000);
-            }}
-        >{children}</PullToRefresh>
-    );
-}
-
-const POST_QUERY = gql`
-    query getGreeting($idx: Int!) {
-    posts(offset: $idx, limit: 10){
-        id
+const COMMUNITY_QUERY = gql`
+    query getcommunity($id: ID!) {
+    community(id: $id){
         title
-        body
-        author{
-            username
+        posts{
             id
+            title
+            body
+            author{
+                username
+            }
         }
     }
   }`;
@@ -45,18 +26,19 @@ let source = new ListView.DataSource({
 });
 
 const Feed: React.FC = () => {
+    const { communityId } = useParams();
+
     const history = useHistory()
 
     const [fetchIdx, setFetchIdx] = useState(0);
     const [dataSource, setDataSource] = useState(source);
     const [, setPosts] = useState<any[]>([]);
-    const { loading, error, data } = useQuery<{ posts: any[] }>(POST_QUERY, { variables: { idx: fetchIdx * 10 } });
-
+    const { loading, error, data } = useQuery<{ community: any }>(COMMUNITY_QUERY, { variables: { id: communityId } });
     useEffect(() => {
         setPosts(prev => {
             if (!data) return prev;
 
-            const newPost = data.posts.filter(p => prev.find(f => f.id === p.id) === undefined)
+            const newPost = data.community.posts.filter((p: {id:string}) => prev.find(f => f.id === p.id) === undefined)
             if (newPost.length === 0) return prev;
 
             setDataSource(dataSource.cloneWithRows(prev.concat(newPost)))
@@ -67,20 +49,10 @@ const Feed: React.FC = () => {
 
     if (error) return <p>Error :(</p>;
 
-    const por = !loading ? {} : {
-        renderFooter: () => {
-            return (
-                <div style={{ padding: 30, textAlign: 'center' }}>
-                    Loading...
-                </div>
-            );
-        }
-    }
+        console.log(data)
 
     return (
         <ListView
-            {...por}
-            pullToRefresh={<Pull />}
             contentContainerStyle={{ position: 'unset' }}
             style={{ flex: 1 }}
             dataSource={dataSource}

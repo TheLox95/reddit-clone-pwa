@@ -3,6 +3,7 @@ import { ListView, WingBlank, WhiteSpace, Card, Flex } from 'antd-mobile';
 import { useQuery } from '@apollo/react-hooks';
 import { gql } from 'apollo-boost';
 import { Wrapper } from '../components/Wrapper';
+import { useHistory } from 'react-router-dom';
 
 const POST_QUERY = gql`
     query getGreeting($idx: Int!) {
@@ -25,6 +26,7 @@ const getCord = () => {
 
 
 const Communities: React.FC = () => {
+    const history = useHistory()
     const [fetchIdx, setFetchIdx] = useState(0);
     const [dataSource, setDataSource] = useState(source);
     const [, setPosts] = useState<any[]>([]);
@@ -53,7 +55,9 @@ const Communities: React.FC = () => {
             renderRow={(data: any, _, id) => {
                 return (
                     <WingBlank key={id} size="md">
-                        <Card style={{
+                        <Card
+                        onClick={() => history.push(`/community/${data.id}`)}
+                        style={{
                             padding: 0,
                             height: '3rem',
                             border: 'unset',
