@@ -7,6 +7,7 @@ import CreatePost from './screens/CreatePost';
 import Login from './screens/Login';
 import Register from './screens/Register';
 import ViewPost from './screens/ViewPost';
+import Profile from './screens/Profile';
 
 function App() {
 
@@ -29,6 +30,9 @@ function App() {
           />
           <Route path="/feed" exact>
             <Feed />
+          </Route>
+          <Route path="/profile/:userId" exact>
+            <Profile />
           </Route>
           <Route path="/createPost" exact>
             <CreatePost />

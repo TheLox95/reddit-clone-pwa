@@ -7,6 +7,7 @@ import { gql } from 'apollo-boost';
 import * as HtmlToReact from 'html-to-react';
 import { useMutation } from '@apollo/react-hooks';
 import { Wrapper } from '../components/Wrapper';
+import { Redirect } from 'react-router-dom';
 
 
 const CREATE_POST_QUERY = gql`mutation CREATE_POST_QUERY($title: String!, $body: String!, $communityId: ID!){
@@ -26,7 +27,10 @@ const CreatePost: React.FC = () => {
 
   const [preview, setPreview] = useState({ raw: '', parsed: '' });
   const [isPreviewDisabled, setIsPreviewDisabled] = useState(true);
+  const [created, setCreated] = useState(false);
   const [createPost, { loading }] = useMutation(CREATE_POST_QUERY);
+
+  if (created) return <Redirect to={`/post/${created}`} />
 
   return (
     <Tabs tabs={[
@@ -84,8 +88,8 @@ const CreatePost: React.FC = () => {
         </Card>
 
         <Button loading={loading} onClick={() => {
-          createPost({ variables: { title: 'jjjj', body: preview.raw, communityId: 1 } })
-            .then(r => console.log(r))
+          createPost({ variables: { title: 'jjjj', body: preview.raw, communityId: '5e4f2f3b98916c0fcb1c0317' } })
+            .then(r => setCreated(r.data.postCreateOne.id))
             .catch((err) => {
               Toast.fail(err.toString(), 1)
             })
