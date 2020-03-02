@@ -59,7 +59,7 @@ export type Post = {
 }
 
 const ViewPost: React.FC = () => {
-    const { id } = useParams();
+    const { id, commentId } = useParams();
 
     const [fetchQueries, { loading, error, data, refetch }] = useLazyQuery<{ post: Post }>(POST_QUERY, { variables: { id: id || 0 } });
 
@@ -85,8 +85,6 @@ const ViewPost: React.FC = () => {
                 </Card.Body>
             </Card>
             <WhiteSpace size='xl' />
-
-            {localStorage.getItem('reddit-clone-token') && data && <CreateComment onCreate={() => refetch()} rootPost={data?.post.id} postId={data?.post.id} />}
 
             {data && data.post && <ListManager comments={data.post.comments} rootPost={data.post} />}
 

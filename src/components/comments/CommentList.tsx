@@ -36,7 +36,7 @@ const Comment: React.FC<{ isRoot?: true, comment: CommentQuery, onCommentClick?:
 }
 
 
-const CommentsList: React.FC<{ comments?: any[], rootComment?: CommentQuery, rootPost: string, onClick?: (c: any) => void }> = ({ onClick, comments, rootComment, rootPost }) => {
+const CommentsList: React.FC<{ comments?: any[], rootComment?: CommentQuery, rootPost: string, onClick?: (c: any) => void }> = ({ onClick, comments, rootComment, rootPost, children }) => {
     const controls = useAnimation()
     const history = useHistory();
 
@@ -47,6 +47,7 @@ const CommentsList: React.FC<{ comments?: any[], rootComment?: CommentQuery, roo
 
     return (
         <motion.div style={{ x: rootComment ? '100%' : '-100%' }} animate={controls}>
+            {children}
             {rootComment && (
                 <>
                 <Comment isRoot={true} comment={rootComment} onCommentClick={() => {

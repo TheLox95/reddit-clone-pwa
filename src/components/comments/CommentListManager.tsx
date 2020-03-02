@@ -4,6 +4,8 @@ import CommentsList from './CommentList';
 import { useLazyQuery } from '@apollo/react-hooks';
 import { gql } from 'apollo-boost';
 import { PartialComment } from '../../screens/ViewPost';
+import CreateComment from './CreateComment';
+import { WhiteSpace } from 'antd-mobile';
 
 export type CommentQuery = {
     id: string
@@ -63,7 +65,12 @@ const ListManager: React.FC<{ comments: CommentQuery[] | PartialComment[], rootP
     }, [commentToLook]);
 
     if (!commentId) {
-        return <CommentsList comments={comments} rootPost={rootPost.id} />
+        return (
+            <CommentsList comments={comments} rootPost={rootPost.id} >
+                {localStorage.getItem('reddit-clone-token') && rootPost && !commentId && <CreateComment onCreate={() => refetch()} rootPost={rootPost.id} postId={rootPost.id} />}
+                <WhiteSpace />
+            </CommentsList>
+        );
     } else {
         if (commentData) {
             return <CommentsList onClick={(c) => setCommentToLook(c)} rootComment={commentData.comment} comments={commentData?.comment.comments} rootPost={rootPost.id} />
