@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
-import { Card, WingBlank, WhiteSpace, Toast } from 'antd-mobile';
+import { Card, WingBlank, WhiteSpace, Toast, Button } from 'antd-mobile';
 import { gql } from 'apollo-boost';
 // @ts-ignore
 import * as HtmlToReact from 'html-to-react';
 import { useLazyQuery } from '@apollo/react-hooks';
 import { Wrapper } from '../components/Wrapper';
-import { useParams, Redirect } from 'react-router-dom';
+import { useParams, Redirect, useHistory } from 'react-router-dom';
 import Showdown from 'showdown';
 import ListManager from '../components/comments/CommentListManager';
 
@@ -15,6 +15,10 @@ const POST_QUERY = gql`query QUERY($id: ID!){
     id
     title
     body
+    author{
+        id
+        username
+    }
     comments{
         id
         body
@@ -54,11 +58,16 @@ export type Post = {
     id: string,
     title: string,
     body: string,
+    author:{
+        id: string;
+        username: string;
+    }
     comments: PartialComment[]
 }
 
 const ViewPost: React.FC = () => {
-    const { id, commentId } = useParams();
+    const { id } = useParams();
+    const history = useHistory();
 
     const [fetchQueries, { loading, error, data, refetch }] = useLazyQuery<{ post: Post }>(POST_QUERY, { variables: { id: id || 0 } });
 
@@ -79,7 +88,8 @@ const ViewPost: React.FC = () => {
             <Card >
                 <Card.Body style={{ display: 'flex', padding: 0, overflow: 'hidden' }}>
                     <div>
-                        {data && data.post && parser.parse(converter.makeHtml(data.post.body))}
+                        {data && parser.parse(converter.makeHtml(data.post.body))}
+                        {data && <Button onClick={() => history.push(`/profile/${data.post.author.id}`)} size="small" style={{ backgroundColor: '#659b5e'}}>{data.post.author.username}</Button>}
                     </div>
                 </Card.Body>
             </Card>

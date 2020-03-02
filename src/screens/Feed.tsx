@@ -35,6 +35,7 @@ const POST_QUERY = gql`
         body
         author{
             username
+            id
         }
     }
   }`;

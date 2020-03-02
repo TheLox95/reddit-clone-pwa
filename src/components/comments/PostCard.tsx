@@ -3,7 +3,6 @@ import React from 'react';
 import { Card, WhiteSpace, WingBlank, Flex } from 'antd-mobile';
 
 const PostCard = (p: any, idx: React.ReactText, fn: () => void) => {
-
     return (
         <WingBlank key={idx} size="md">
             {idx === '0' ? <WhiteSpace size="lg" style={{ minHeight: '1.5rem' }} /> : null}

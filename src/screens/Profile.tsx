@@ -19,6 +19,7 @@ const USER_QUERY = gql`query USER_QUERY($id: ID!){
         body
         author{
             username
+            id
         }
     }
   }
