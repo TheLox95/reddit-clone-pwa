@@ -3,12 +3,11 @@ import { Card, WingBlank, WhiteSpace, Toast } from 'antd-mobile';
 import { gql } from 'apollo-boost';
 // @ts-ignore
 import * as HtmlToReact from 'html-to-react';
-import { useQuery, useLazyQuery } from '@apollo/react-hooks';
+import { useLazyQuery } from '@apollo/react-hooks';
 import { Wrapper } from '../components/Wrapper';
 import { useParams, Redirect } from 'react-router-dom';
 import Showdown from 'showdown';
 import ListManager from '../components/comments/CommentListManager';
-import CreateComment from '../components/comments/CreateComment';
 
 
 const POST_QUERY = gql`query QUERY($id: ID!){
