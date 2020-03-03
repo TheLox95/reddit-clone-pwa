@@ -68,3 +68,12 @@
   border-top: unset;
   border-bottom: unset;
 }
+
+.am-list-line {
+  border-bottom: unset!important;
+}
+
+.my-drawer .am-list-body{
+  flex: 1;
+  position: relative;
+}
