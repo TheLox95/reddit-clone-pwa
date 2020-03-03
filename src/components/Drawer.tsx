@@ -36,7 +36,7 @@ const DrawerComponent: React.FC<{ background: 'sm' | 'bg' }> = ({ children, back
           })}
           <SidemenuBottom />
         </List>}
-        open={true}
+        open={isOpen}
         onOpenChange={(c) => setIsOpen(!isOpen)}
       >
         {children}
