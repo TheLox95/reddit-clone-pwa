@@ -10,6 +10,7 @@ import ViewPost from './screens/ViewPost';
 import Profile from './screens/Profile';
 import Communities from './screens/Communities';
 import Community from './screens/Community';
+import CreateCommunity from './screens/CreateCommunity';
 
 function App() {
 
@@ -32,6 +33,9 @@ function App() {
           />
           <Route path="/feed" exact>
             <Feed />
+          </Route>
+          <Route path="/createCommunity" exact>
+            <CreateCommunity />
           </Route>
           <Route path="/communities" exact>
             <Communities />

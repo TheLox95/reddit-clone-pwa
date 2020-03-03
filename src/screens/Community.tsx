@@ -49,10 +49,16 @@ const Feed: React.FC = () => {
 
     if (error) return <p>Error :(</p>;
 
-        console.log(data)
-
     return (
         <ListView
+            renderHeader={() => {
+                return (
+                    <>
+                    <h1 style={{ color: 'white'}}>{data?.community.title}</h1>
+                    {data && data.community.posts.length === 0 && <h3 style={{ color: 'black'}}>No post so far</h3>}
+                    </>
+                );
+            }}
             contentContainerStyle={{ position: 'unset' }}
             style={{ flex: 1 }}
             dataSource={dataSource}

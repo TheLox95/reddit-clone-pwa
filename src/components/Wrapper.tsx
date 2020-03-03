@@ -1,34 +1,39 @@
 import React, { useState } from 'react';
 import Top from '../components/Drawer';
-import { Button } from 'antd-mobile';
 import { Redirect, useLocation } from 'react-router-dom';
+import { Fab, Action } from 'react-tiny-fab';
+import 'react-tiny-fab/dist/styles.css';
+import { IoIosAddCircle, IoMdText, IoIosPeople } from 'react-icons/io';
 
 const FAB: React.FC = () => {
-    const [ redirect, setRedirect ] = useState(false);
+    const [redirect, setRedirect] = useState('');
 
-    if (redirect) {
-        return <Redirect to="/createPost" />
+    if (redirect !== '') {
+        return <Redirect to={redirect} />
     }
 
     return (
-        <Button 
-            onClick={() => setRedirect(true)}
-            style={{
-                width: "4rem",
-                height: "4rem",
-                backgroundColor: "#95bf74",
-                borderRadius: "50%",
-            
-                color: "white",
-                textAlign: "center",
-            
-                position: "fixed",
-                right: "5%",
-                bottom: "5%",
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'space-evenly'
-        }}>+</Button>
+        <Fab
+            alwaysShowTitle={true}
+            mainButtonStyles={{ backgroundColor: "#95bf74"}}
+            icon={<IoIosAddCircle />}
+            event='click'
+        >
+            <Action
+                style={{ backgroundColor: "#95bf74"}}
+                text="Create Post"
+                onClick={() => setRedirect("/createPost")}
+            >
+                <IoMdText />
+            </Action>
+            <Action
+                style={{ backgroundColor: "#95bf74"}}
+                text="Crate Community"
+                onClick={() => setRedirect("/createCommunity")}
+            >
+                <IoIosPeople />
+            </Action>
+        </Fab>
     );
 }
 
