@@ -1,21 +1,25 @@
-import React from 'react';
+import React, { lazy, Suspense } from 'react';
 import 'antd-mobile/dist/antd-mobile.css';
 import './App.css';
-import Feed from './screens/Feed';
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
-import CreatePost from './screens/CreatePost';
-import Login from './screens/Login';
-import Register from './screens/Register';
-import ViewPost from './screens/ViewPost';
-import Profile from './screens/Profile';
-import Communities from './screens/Communities';
-import Community from './screens/Community';
-import CreateCommunity from './screens/CreateCommunity';
+import { SplashScreen } from './components/SplashScreen';
+
+const Feed = lazy(() => import('./screens/Feed'));
+const CreateCommunity = lazy(() => import('./screens/CreateCommunity'));
+const CreatePost = lazy(() => import('./screens/CreatePost'));
+const Login = lazy(() => import('./screens/Login'));
+const Register = lazy(() => import('./screens/Register'));
+const ViewPost = lazy(() => import('./screens/ViewPost'));
+const Profile = lazy(() => import('./screens/Profile'));
+const Community = lazy(() => import('./screens/Community'));
+const Communities = lazy(() => import('./screens/Communities'));
+
 
 function App() {
 
   return (
     <Router>
+      <Suspense fallback={<SplashScreen></SplashScreen>}>
         <Switch>
           <Route path="/" exact noTitle>
             <Login />
@@ -54,6 +58,7 @@ function App() {
           </Route>
           <Redirect to="/feed" />
         </Switch>
+        </Suspense>
     </Router>
   );
 }
