@@ -39,11 +39,7 @@ function App() {
           <Route path="/feed" exact>
             <Feed />
           </Route>
-          <AuthRoute>
-            <Route path="/createCommunity" exact>
-              <CreateCommunity />
-            </Route>
-          </AuthRoute>
+          <AuthRoute exact component={CreatePost} />
           <Route path="/communities" exact>
             <Communities />
           </Route>
@@ -53,11 +49,7 @@ function App() {
           <Route path="/profile/:userId" exact>
             <Profile />
           </Route>
-          <AuthRoute>
-            <Route path="/createPost" exact>
-              <CreatePost />
-            </Route>
-          </AuthRoute>
+          <AuthRoute exact component={CreatePost} />
           <Route path="/register" exact>
             <Register />
           </Route>
