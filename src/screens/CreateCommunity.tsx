@@ -47,7 +47,7 @@ const CreateCommunity = () => {
                         .catch((err) => {
                             Toast.fail(err.toString(), 4)
                         })
-                })}>Login</Button>
+                })}>Create</Button>
                 <WhiteSpace size='xl' />
             </WingBlank>
         </>

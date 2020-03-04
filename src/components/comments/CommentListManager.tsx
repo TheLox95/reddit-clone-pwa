@@ -54,13 +54,14 @@ const ListManager: React.FC<{ comments: CommentQuery[] | PartialComment[], rootP
     const { commentId } = useParams();
 
     const [commentToLook, setCommentToLook] = useState(null);
-    const [loadQueries, { data: commentData, called, refetch }] = useLazyQuery<{ comment: CommentQuery }>(COMMENT_QUERY, { variables: { id: commentId ? commentId : 0 } });
+    const [loadQueries, { data: commentData, called, refetch }] = useLazyQuery<{ comment: CommentQuery }>(COMMENT_QUERY);
 
     useEffect(() => {
+        if (!commentId) return;
         if (!called) {
-            loadQueries();
+            loadQueries( { variables: { id: commentId } });
         } else {
-            refetch()
+            refetch({ variables: { id: commentId } })
         }
     }, [commentToLook]);
 

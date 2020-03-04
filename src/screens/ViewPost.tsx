@@ -10,7 +10,7 @@ import Showdown from 'showdown';
 import ListManager from '../components/comments/CommentListManager';
 
 
-const POST_QUERY = gql`query QUERY($id: ID!){
+const POST_QUERY = gql`query VIEW_POST_QUERY($id: ID!){
   post(id: $id){
     id
     title

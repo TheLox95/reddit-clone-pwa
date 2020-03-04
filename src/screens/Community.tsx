@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { PullToRefresh, ListView } from 'antd-mobile';
-import { useQuery } from '@apollo/react-hooks';
+import { ListView } from 'antd-mobile';
+import { useLazyQuery } from '@apollo/react-hooks';
 import { useHistory, useParams } from "react-router-dom";
 import { gql } from 'apollo-boost';
 import { Wrapper } from '../components/Wrapper';
@@ -30,24 +30,36 @@ const Feed: React.FC = () => {
 
     const history = useHistory()
 
-    const [fetchIdx, setFetchIdx] = useState(0);
     const [dataSource, setDataSource] = useState(source);
     const [, setPosts] = useState<any[]>([]);
-    const { loading, error, data } = useQuery<{ community: any }>(COMMUNITY_QUERY, { variables: { id: communityId } });
+    const [fetchCommnity ,{error, data, called, refetch}] = useLazyQuery<{ community: any }>(COMMUNITY_QUERY, {
+        fetchPolicy: 'no-cache',
+        onCompleted: (result) => {
+            setPosts(prev => {
+                const newPost = result.community.posts
+                .filter((p: {id:string}) => prev.find(f => f.id === p.id) === undefined)
+                if (newPost.length === 0) return prev;
+    
+                setDataSource(dataSource.cloneWithRows(prev.concat(newPost).reverse()))
+                return prev.concat(newPost);
+    
+            });
+        }
+    });
+
     useEffect(() => {
-        setPosts(prev => {
-            if (!data) return prev;
+        if (!communityId) return
+        if (called){
+            refetch({ variables: { id: communityId } })
+        } else {
+            fetchCommnity({ variables: { id: communityId } });
+        }
+    }, []);
 
-            const newPost = data.community.posts.filter((p: {id:string}) => prev.find(f => f.id === p.id) === undefined)
-            if (newPost.length === 0) return prev;
-
-            setDataSource(dataSource.cloneWithRows(prev.concat(newPost)))
-            return prev.concat(newPost);
-
-        });
-    }, [loading]);
-
-    if (error) return <p>Error :(</p>;
+    if (error) {
+        console.log(error)
+        return <p>Error :(</p>;
+    }
 
     return (
         <ListView
@@ -64,7 +76,6 @@ const Feed: React.FC = () => {
             dataSource={dataSource}
             renderRow={(data: any, _, id) => PostCard(data, id, () => history.push(`/post/${data.id}`))}
             scrollRenderAheadDistance={500}
-            onEndReached={() => setFetchIdx(prev => prev + 1)}
             onEndReachedThreshold={10}
         />
     );

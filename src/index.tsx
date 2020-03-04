@@ -10,7 +10,8 @@ import ApolloClient from 'apollo-boost';
 
 const client = new ApolloClient({
     onError: (err) => {
-        if (Array.isArray(err.graphQLErrors) && err.graphQLErrors[0].extensions.code === 'UNAUTHENTICATED') {
+        console.log(err)
+        if (Array.isArray(err.graphQLErrors) && err.graphQLErrors[0].extensions.code.match(/(UNAUTHENTICATED|FORBIDDEN)/g)) {
             localStorage.removeItem('reddit-clone-token');
             // eslint-disable-next-line no-restricted-globals
             location.reload()
