@@ -8,6 +8,8 @@ import * as serviceWorker from './serviceWorker';
 import { ApolloProvider } from '@apollo/react-hooks';
 import ApolloClient from 'apollo-boost';
 
+console.log(`${process.env.REACT_APP_SERVER_URL}/graphql`)
+
 const client = new ApolloClient({
     onError: (err) => {
         console.log(err)
@@ -17,7 +19,7 @@ const client = new ApolloClient({
             location.reload()
         }
     },
-    uri: 'http://localhost:6060/graphql',
+    uri: `${process.env.REACT_APP_SERVER_URL}/graphql`,
     request: (operation) => {
         const token = localStorage.getItem('reddit-clone-token')
         const headers = token ? { authorization: `${token}` } : {}
