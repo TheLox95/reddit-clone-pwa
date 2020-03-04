@@ -38,6 +38,7 @@ const CreatePost: React.FC = () => {
   const [selectedCommunity, setSelectedCommunity] = useState<{ id: string, title: string } | null>(null);
   const [createPost, { loading }] = useMutation(CREATE_POST_QUERY);
   const { data, loading: loadingCommunities } = useQuery<{ communities: any[] }>(QUERY_COMMUNITIES, {
+    fetchPolicy: 'no-cache',
     onCompleted: (data) => {
       setSelectedCommunity(data.communities[0])
     }
