@@ -1,12 +1,9 @@
 import React, { useEffect } from 'react';
 import { Card, WingBlank, WhiteSpace, Toast } from 'antd-mobile';
 import { gql } from 'apollo-boost';
-// @ts-ignore
-import * as HtmlToReact from 'html-to-react';
 import { useLazyQuery } from '@apollo/react-hooks';
 import { Wrapper } from '../components/Wrapper';
 import { useParams, Redirect, useHistory } from 'react-router-dom';
-import Showdown from 'showdown';
 import PostCard from '../components/comments/PostCard';
 
 
@@ -25,20 +22,11 @@ const USER_QUERY = gql`query USER_QUERY($id: ID!){
   }
 }`;
 
-const converter = new Showdown.Converter({
-    tables: true,
-    simplifiedAutoLink: true,
-    strikethrough: true,
-    tasklists: true
-});
-
-const parser = new HtmlToReact.Parser();
-
 const ViewUser: React.FC = () => {
     const { userId } = useParams();
     const history = useHistory()
 
-    const [fetchQueries, { loading, error, data, refetch }] = useLazyQuery<{ user: any }>(USER_QUERY, { variables: { id: userId || 0 } });
+    const [fetchQueries, { loading, error, data }] = useLazyQuery<{ user: any }>(USER_QUERY, { variables: { id: userId || 0 } });
 
     useEffect(() => {
         fetchQueries();
