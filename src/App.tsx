@@ -3,6 +3,7 @@ import 'antd-mobile/dist/antd-mobile.css';
 import './App.css';
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
 import { SplashScreen } from './components/SplashScreen';
+import AuthRoute from './components/AuthRoute';
 
 const Feed = lazy(() => import('./screens/Feed'));
 const CreateCommunity = lazy(() => import('./screens/CreateCommunity'));
@@ -38,9 +39,11 @@ function App() {
           <Route path="/feed" exact>
             <Feed />
           </Route>
-          <Route path="/createCommunity" exact>
-            <CreateCommunity />
-          </Route>
+          <AuthRoute>
+            <Route path="/createCommunity" exact>
+              <CreateCommunity />
+            </Route>
+          </AuthRoute>
           <Route path="/communities" exact>
             <Communities />
           </Route>
@@ -50,9 +53,11 @@ function App() {
           <Route path="/profile/:userId" exact>
             <Profile />
           </Route>
-          <Route path="/createPost" exact>
-            <CreatePost />
-          </Route>
+          <AuthRoute>
+            <Route path="/createPost" exact>
+              <CreatePost />
+            </Route>
+          </AuthRoute>
           <Route path="/register" exact>
             <Register />
           </Route>
