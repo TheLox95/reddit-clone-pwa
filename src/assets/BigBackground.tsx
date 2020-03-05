@@ -1,8 +1,8 @@
 import React from 'react';
 
 export const BigBackground = () => (
-    <div style={{ position: 'absolute', overflow: 'hidden', maxHeight: document.documentElement.clientHeight, maxWidth: document.documentElement.clientWidth }}>
-        <svg version="1.1" viewBox="0 0 1440 3016.2" xmlns="http://www.w3.org/2000/svg">
+    <div style={{ position: 'absolute', overflow: 'hidden', maxHeight: '100%', maxWidth: '100%', left: 0, right: 0 }}>
+        <svg version="1.1" width={`100%`} height={`100%`} viewBox="0 0 1440 3016.2" xmlns="http://www.w3.org/2000/svg">
             <defs>
                 <linearGradient id="linearGradient1990" x1="582.47" x2="1433.5" y1="-76.286" y2="1401.9" gradientTransform="matrix(1 0 0 3.1252 0 -1.3823)" gradientUnits="userSpaceOnUse">
                     <stop stop-color="#0e3b43" offset="0" />

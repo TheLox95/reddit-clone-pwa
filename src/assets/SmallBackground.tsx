@@ -1,8 +1,8 @@
 import React from 'react';
 
 export const SmallBackground = () => (
-    <div style={{ position: 'absolute' }}>
-        <svg version="1.1" viewBox="0 0 1440 993.12" >
+    <div style={{ position: 'absolute', maxHeight: '100%', maxWidth: '100%', left: 0, right: 0 }}>
+        <svg version="1.1" width={`100%`} height={`100%`} viewBox="0 0 1440 993.12" >
             <defs>
                 <linearGradient id="linearGradient1990" x1="582.47" x2="1433.5" y1="-76.286" y2="1401.9" gradientTransform="matrix(1 0 0 .99022 0 -.44505)" gradientUnits="userSpaceOnUse">
                     <stop stop-color="#0e3b43" offset="0" />
