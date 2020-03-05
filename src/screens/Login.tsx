@@ -72,9 +72,7 @@ const Login = () => {
                             Toast.fail(err.toString(), 4)
                         })
                 })}>Login</Button>
-                <WhiteSpace size='xl' />
-                <WhiteSpace size='xl' />
-                <WhiteSpace size='xl' />
+                <WhiteSpace style={{ height: '8vh'}} />
                 <Button style={{ backgroundColor: '#659b5e', borderColor: "#659b5e" }} onClick={() => {
                     setGoToRegister(true);
                 }} size="small" type="primary">Register</Button>
